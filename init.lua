@@ -36,6 +36,9 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  -- Github copilot lua
+  'zbirenbaum/copilot.lua',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -69,6 +72,14 @@ require('lazy').setup({
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
+  },
+
+  -- Copilot integration to cmp
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
+    end
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -257,6 +268,13 @@ require('telescope').setup {
   },
 }
 
+-- Diisable copilot suggestions
+require("copilot").setup({
+  suggestion = { enabled = false },
+  panel = { enabled = false },
+  ft = { 'yaml' },
+})
+
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
@@ -273,12 +291,12 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- Define a function that calls find_files with the 'hidden' option set to true
 local find_files_hidden = function()
-    require('telescope.builtin').find_files({ hidden = true })
+  require('telescope.builtin').find_files({ hidden = true })
 end
 
 -- Define a function that calls find_files with the 'hidden' option set to true
 local live_grep_hidden = function()
-    require('telescope.builtin').live_grep({ hidden = true })
+  require('telescope.builtin').live_grep({ hidden = true })
 end
 
 vim.keymap.set('n', '<leader>fg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
@@ -501,6 +519,7 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
+    { name = 'copilot'},
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
