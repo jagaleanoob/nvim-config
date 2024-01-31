@@ -272,7 +272,6 @@ require('telescope').setup {
 require("copilot").setup({
   suggestion = { enabled = false },
   panel = { enabled = false },
-  ft = { 'yaml' },
 })
 
 -- Enable telescope fzf native, if installed
@@ -457,6 +456,30 @@ require('neodev').setup()
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+-- Script for autodetect venv python
+local function get_python_path(workspace)
+  -- Use activated virtualenv.
+  if vim.env.VIRTUAL_ENV then
+    return vim.env.VIRTUAL_ENV .. '/bin/python'
+  end
+
+  -- Find and use virtualenv in workspace directory.
+  for _, pattern in ipairs({'*', '.*'}) do
+    local match = vim.fn.glob(vim.fn.getcwd() .. '/' .. pattern .. '/bin/python')
+    if match ~= '' then
+      return match
+    end
+  end
+
+  -- Fallback to system Python.
+  return vim.fn.exepath('python') or 'python'
+end
+
+-- require'lspconfig'.pylsp.setup{
+--   cmd = {get_python_path(0), "-m", "pylsp"},
+--   -- Other configuration options
+-- }
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
