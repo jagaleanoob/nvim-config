@@ -2,6 +2,8 @@
 -- See `:help mapleader`
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.api.nvim_set_keymap('n', 'q', 'i', { noremap = true })
+vim.api.nvim_set_keymap('n', 'i', 'q', { noremap = true })
 
 vim.opt.sw = 4
 
