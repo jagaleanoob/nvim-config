@@ -6,6 +6,7 @@ vim.api.nvim_set_keymap('n', 'q', 'i', { noremap = true })
 vim.api.nvim_set_keymap('n', 'i', 'q', { noremap = true })
 
 vim.opt.sw = 4
+vim.opt.tabstop = 4
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -109,11 +110,10 @@ require('lazy').setup({
 
   {
     -- Theme inspired by Atom
-    'maxmx03/solarized.nvim',
+    'rose-pine/neovim',
     priority = 1000,
     config = function()
-      vim.o.background = 'dark'
-      vim.cmd.colorscheme 'solarized'
+      vim.cmd.colorscheme 'rose-pine-main'
     end,
   },
 
@@ -124,7 +124,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'solarized',
+        theme = 'rose-pine',
         component_separators = '|',
         section_separators = '',
       },
@@ -173,6 +173,13 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
+  },
+  
+  {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup()
+    end
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
