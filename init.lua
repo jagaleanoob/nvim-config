@@ -1,12 +1,25 @@
+---@diagnostic disable: missing-fields
 -- Set <space> as the leader key
--- See `:help mapleader`
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+
+-- Switch 'q' and 'i'
 vim.api.nvim_set_keymap('n', 'q', 'i', { noremap = true })
 vim.api.nvim_set_keymap('n', 'i', 'q', { noremap = true })
 
+-- Set default for indent
 vim.opt.sw = 4
 vim.opt.tabstop = 4
+
+-- Define a Lua function to go to the end of line and insert ";"
+local function go_to_end_and_semicolon()
+ vim.cmd('normal! A;')
+ vim.cmd('startinsert!')
+end
+
+-- Set up the mappings
+vim.keymap.set('n', ';', go_to_end_and_semicolon, {noremap = true, silent = true})
+vim.keymap.set('i', '<C-;>', go_to_end_and_semicolon, {noremap = true, silent = true})
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -77,14 +90,14 @@ require('lazy').setup({
     },
   },
 
-  -- Copilot integration to cmp
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
-    end
-  },
-
+  -- -- Copilot integration to cmp
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function()
+  --     require("copilot_cmp").setup()
+  --   end
+  -- },
+  --
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
   {
@@ -174,7 +187,6 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
-  
   {
     'norcalli/nvim-colorizer.lua',
     config = function()
@@ -277,12 +289,12 @@ require('telescope').setup {
   },
 }
 
--- Diisable copilot suggestions
-require("copilot").setup({
-  suggestion = { enabled = false },
-  panel = { enabled = false },
-})
-
+-- -- Diisable copilot suggestions
+-- require("copilot").setup({
+--   suggestion = { enabled = false },
+--   panel = { enabled = false },
+-- })
+--
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
@@ -323,7 +335,7 @@ require('nvim-treesitter.configs').setup {
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
-
+  autotag = { enable = true },
   highlight = { enable = true },
   indent = { enable = true },
   incremental_selection = {
@@ -467,24 +479,24 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Script for autodetect venv python
-local function get_python_path(workspace)
-  -- Use activated virtualenv.
-  if vim.env.VIRTUAL_ENV then
-    return vim.env.VIRTUAL_ENV .. '/bin/python'
-  end
-
-  -- Find and use virtualenv in workspace directory.
-  for _, pattern in ipairs({'*', '.*'}) do
-    local match = vim.fn.glob(vim.fn.getcwd() .. '/' .. pattern .. '/bin/python')
-    if match ~= '' then
-      return match
-    end
-  end
-
-  -- Fallback to system Python.
-  return vim.fn.exepath('python') or 'python'
-end
-
+-- local function get_python_path(workspace)
+--   -- Use activated virtualenv.
+--   if vim.env.VIRTUAL_ENV then
+--     return vim.env.VIRTUAL_ENV .. '/bin/python'
+--   end
+--
+--   -- Find and use virtualenv in workspace directory.
+--   for _, pattern in ipairs({'*', '.*'}) do
+--     local match = vim.fn.glob(vim.fn.getcwd() .. '/' .. pattern .. '/bin/python')
+--     if match ~= '' then
+--       return match
+--     end
+--   end
+--
+--   -- Fallback to system Python.
+--   return vim.fn.exepath('python') or 'python'
+-- end
+--
 -- require'lspconfig'.pylsp.setup{
 --   cmd = {get_python_path(0), "-m", "pylsp"},
 --   -- Other configuration options
@@ -551,11 +563,9 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'copilot'},
+    -- { name = 'copilot'},
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
 }
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
