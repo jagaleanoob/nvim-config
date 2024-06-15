@@ -13,13 +13,13 @@ vim.opt.tabstop = 4
 
 -- Define a Lua function to go to the end of line and insert ";"
 local function go_to_end_and_semicolon()
- vim.cmd('normal! A;')
- vim.cmd('startinsert!')
+  vim.cmd('normal! A;')
+  vim.cmd('startinsert!')
 end
 
 -- Set up the mappings
-vim.keymap.set('n', ';', go_to_end_and_semicolon, {noremap = true, silent = true})
-vim.keymap.set('i', '<C-;>', go_to_end_and_semicolon, {noremap = true, silent = true})
+vim.keymap.set('n', ';', go_to_end_and_semicolon, { noremap = true, silent = true })
+vim.keymap.set('i', '<C-;>', go_to_end_and_semicolon, { noremap = true, silent = true })
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -126,7 +126,7 @@ require('lazy').setup({
     'rose-pine/neovim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'rose-pine-main'
+      vim.cmd.colorscheme 'rose-pine-moon'
     end,
   },
 
@@ -148,11 +148,9 @@ require('lazy').setup({
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
-    },
+    -- See `:help ibl`
+    main = 'ibl',
+    opts = {},
   },
 
   -- "gc" to comment visual regions/lines
@@ -288,6 +286,17 @@ require('telescope').setup {
     },
   },
 }
+-- Enable terminal GUI colors
+vim.o.termguicolors = true
+
+-- Highlight groups for Cursor and Cursor2
+vim.cmd([[
+  hi Cursor guifg=light-grey guibg=lightgrey
+  hi Cursor2 guifg=white guibg=white
+]])
+
+-- Set GUI cursor styles
+vim.o.guicursor = 'n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50'
 
 -- -- Diisable copilot suggestions
 -- require("copilot").setup({
@@ -568,4 +577,3 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
